@@ -1,0 +1,57 @@
+﻿<Window x:Class="EdgeDetection.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EdgeDetection"
+        mc:Ignorable="d"
+        Height="660" Width="820"
+        ResizeMode="NoResize">
+    <Grid Background="Gray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Column="1" Grid.RowSpan="6" BorderBrush="Black" 
+        BorderThickness="1,0,0,0" Background="{x:Null}" />
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock TextAlignment="Center" FontSize="30">Edge Detection</TextBlock>
+            <TextBlock TextAlignment="Center" FontSize="20">Sobel filter</TextBlock>
+        </StackPanel>
+        <Button Grid.Row="1" Height="40" Width="120" Name="btnSelectImage" Click="btnSelectImage_Click" FontSize="14">Select image</Button>
+        
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock TextAlignment="Center" Margin="0,0,0,10" Text="Choose execution type" FontSize="14"/>
+            <RadioButton x:Name="radioCS" Grid.Row="1" Height=" 20" Width="50" IsChecked="True">C#</RadioButton>
+            <RadioButton x:Name="radioAsm" Grid.Row="1" Height=" 20" Width="50">Asm</RadioButton>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock TextAlignment="Center" Text="Threads" FontSize="14"/>
+            <DockPanel>
+                <Slider x:Name="sliderThreads" Grid.Row="2" Height="18" Width="300" Maximum="128" Minimum="1" Value="1" IsSnapToTickEnabled="True"></Slider>
+                <TextBox x:Name="threadsCount" TextAlignment="Center" Text="{Binding ElementName=sliderThreads, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="30"></TextBox>
+            </DockPanel>
+        </StackPanel>
+
+        <Button Grid.Row="4" Height="40" Width="120" Name="btnStart" Click="btnStart_Click" FontSize="14">Start</Button>
+
+        <TextBlock x:Name="textblockTimer" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible" FontSize="14" TextWrapping="Wrap" TextAlignment="Center">Timer: bla bla</TextBlock>
+
+        <Image x:Name="imgSelected" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Height="280" Width="370" Margin="10" StretchDirection="DownOnly"/>
+        <Image x:Name="imgFilter" Grid.Column="1" Grid.Row="3" Grid.RowSpan="4" Height="280" Width="370" Margin="10" Source="/Resources/image.jpg" StretchDirection="DownOnly"></Image>
+
+        
+    </Grid>
+</Window>
