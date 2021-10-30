@@ -25,12 +25,11 @@ namespace EdgeDetection {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            filter = new ImgProcess();
             timer = new Stopwatch();
         }
-        Stopwatch timer;
-        Bitmap sourceBitmap;
-        ImgProcess filter;
+
+        private readonly Stopwatch timer;
+        private Bitmap inputBitmap;
 
         private void btnSelectImage_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -41,20 +40,23 @@ namespace EdgeDetection {
 
             if (result == true) {
                 string filename = dialog.FileName;
-                sourceBitmap = new Bitmap(filename);
+                inputBitmap = new Bitmap(filename);
+                imgSelected.Source = ImgProcess.BitmapToImage(inputBitmap);
             }
         }
 
-        private void btnStart_Click(object sender, RoutedEventArgs e) {
+        private void BtnStart_Click(object sender, RoutedEventArgs e) {
 
-            timer.Restart();
+            if(inputBitmap != null) {
+                timer.Restart();
+                Bitmap res = ImgProcess.EdgeDetection(inputBitmap, (int)sliderThreads.Value);
+                timer.Stop();
 
-            Bitmap es = ImgProcess.EdgeDetection(sourceBitmap);
-            imgFilter.Source = ImgProcess.BitmapToImage(es);
-
-            timer.Stop();
-            TimeSpan time = timer.Elapsed;
-            textblockTimer.Text = $"Timer: {time.Minutes}m {time.Seconds}s {time.Milliseconds}ms";
+                imgFilter.Source = ImgProcess.BitmapToImage(res);
+                TimeSpan time = timer.Elapsed;
+                textblockTimer.Visibility = Visibility.Visible;
+                textblockTimer.Text = $"Timer: {time.Minutes}m {time.Seconds}s {time.Milliseconds}ms";
+            }
         }
     }
 }
