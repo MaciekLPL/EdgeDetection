@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -25,8 +26,9 @@ namespace EdgeDetection {
         public MainWindow() {
             InitializeComponent();
             filter = new ImgProcess();
+            timer = new Stopwatch();
         }
-
+        Stopwatch timer;
         Bitmap sourceBitmap;
         ImgProcess filter;
 
@@ -39,17 +41,20 @@ namespace EdgeDetection {
 
             if (result == true) {
                 string filename = dialog.FileName;
-                textblockTimer.Text = filename;
                 sourceBitmap = new Bitmap(filename);
             }
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e) {
 
+            timer.Restart();
 
-            Bitmap es = filter.EdgeDetection(sourceBitmap, (int) sliderThreads.Value);
-            imgFilter.Source = filter.BitmapToImage(es);
+            Bitmap es = ImgProcess.EdgeDetection(sourceBitmap);
+            imgFilter.Source = ImgProcess.BitmapToImage(es);
 
+            timer.Stop();
+            TimeSpan time = timer.Elapsed;
+            textblockTimer.Text = $"Timer: {time.Minutes}m {time.Seconds}s {time.Milliseconds}ms";
         }
     }
 }
