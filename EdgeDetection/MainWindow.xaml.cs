@@ -24,39 +24,32 @@ namespace EdgeDetection {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+            filter = new ImgProcess();
         }
+
+        Bitmap sourceBitmap;
+        ImgProcess filter;
 
         private void btnSelectImage_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = ".png";
-            dialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
+            dialog.DefaultExt = ".bmp";
+            dialog.Filter = "BMP Files (*.bmp)|*.bmp";
 
             Nullable<bool> result = dialog.ShowDialog();
 
             if (result == true) {
                 string filename = dialog.FileName;
                 textblockTimer.Text = filename;
+                sourceBitmap = new Bitmap(filename);
             }
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e) {
 
+
+            Bitmap es = filter.EdgeDetection(sourceBitmap, (int) sliderThreads.Value);
+            imgFilter.Source = filter.BitmapToImage(es);
+
         }
-
-        BitmapImage BitmapToImageSource(Bitmap bitmap) {
-
-            using (MemoryStream memory = new MemoryStream()) {
-                bitmap.Save(memory, ImageFormat.Bmp);
-                memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
-                return bitmapimage;
-
-            }
-        }
-
     }
 }
