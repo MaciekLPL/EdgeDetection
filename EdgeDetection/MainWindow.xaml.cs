@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -30,16 +31,15 @@ namespace EdgeDetection {
 
         private readonly Stopwatch timer;
         private Bitmap inputBitmap;
+        private Bitmap resultBitmap;
 
         private void btnSelectImage_Click(object sender, RoutedEventArgs e) {
-            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = ".bmp";
-            dialog.Filter = "BMP Files (*.bmp)|*.bmp";
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = ".bmp";
+            ofd.Filter = "BMP Files (*.bmp)|*.bmp";
 
-            Nullable<bool> result = dialog.ShowDialog();
-
-            if (result == true) {
-                string filename = dialog.FileName;
+            if (ofd.ShowDialog() == true) {
+                string filename = ofd.FileName;
                 inputBitmap = new Bitmap(filename);
                 imgSelected.Source = ImgProcess.BitmapToImage(inputBitmap);
             }
@@ -49,13 +49,27 @@ namespace EdgeDetection {
 
             if(inputBitmap != null) {
                 timer.Restart();
-                Bitmap res = ImgProcess.EdgeDetection(inputBitmap, (int)sliderThreads.Value);
+                resultBitmap = ImgProcess.EdgeDetection(inputBitmap, (int)sliderThreads.Value);
                 timer.Stop();
 
-                imgFilter.Source = ImgProcess.BitmapToImage(res);
+                imgFilter.Source = ImgProcess.BitmapToImage(resultBitmap);
+                
                 TimeSpan time = timer.Elapsed;
                 textblockTimer.Visibility = Visibility.Visible;
                 textblockTimer.Text = $"Timer: {time.Minutes}m {time.Seconds}s {time.Milliseconds}ms";
+            }
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e) {
+            if (resultBitmap != null) {
+
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.DefaultExt = ".bmp";
+                sfd.Filter = "BMP Files (*.bmp)|*.bmp";
+
+                if (sfd.ShowDialog() == true) {
+                    resultBitmap.Save(sfd.FileName, ImageFormat.Bmp);
+                }
             }
         }
     }

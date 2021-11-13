@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:EdgeDetection"
         mc:Ignorable="d"
         Height="660" Width="820"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Title="Edge detection - Sobel filter">
     <Grid Background="Gray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400"/>
@@ -45,13 +46,15 @@
             </DockPanel>
         </StackPanel>
 
-        <Button Grid.Row="4" Height="40" Width="120" Name="btnStart" Click="BtnStart_Click" FontSize="14">Start</Button>
-
+        <DockPanel Grid.Row="4">
+            <Button Grid.Row="4" Height="40" Width="120" Name="btnStart" Click="BtnStart_Click" HorizontalAlignment="Left" Margin="30" FontSize="14">Start</Button>
+            <Button Grid.Row="4" Height="40" Width="120" Name="btnSave" Click="BtnSave_Click" HorizontalAlignment="Right" Margin="30" FontSize="14">Save</Button>
+        </DockPanel>
+        
         <TextBlock x:Name="textblockTimer" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" FontSize="14" TextWrapping="Wrap" TextAlignment="Center">Timer: bla bla</TextBlock>
 
         <Image x:Name="imgSelected" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Height="280" Width="370" Margin="10" StretchDirection="DownOnly"/>
-        <Image x:Name="imgFilter" Grid.Column="1" Grid.Row="3" Grid.RowSpan="4" Height="280" Width="370" Margin="10" Source="/Resources/image.jpg" StretchDirection="DownOnly"></Image>
+        <Image x:Name="imgFilter" Grid.Column="1" Grid.Row="3" Grid.RowSpan="4" Height="280" Width="370" Margin="10" StretchDirection="DownOnly"></Image>
 
-        
     </Grid>
 </Window>
