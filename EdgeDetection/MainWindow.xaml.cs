@@ -53,10 +53,18 @@ namespace EdgeDetection {
                 timer.Stop();
 
                 imgFilter.Source = ImgProcess.BitmapToImage(resultBitmap);
+                double time1 = timer.Elapsed.TotalMilliseconds;
+
+                timer.Restart();
+                resultBitmap = ImgProcess.EdgeDetection2(inputBitmap, (int)sliderThreads.Value);
+                timer.Stop();
+
+                imgFilter.Source = ImgProcess.BitmapToImage(resultBitmap);
+                double time2 = timer.Elapsed.TotalMilliseconds;
                 
-                TimeSpan time = timer.Elapsed;
                 textblockTimer.Visibility = Visibility.Visible;
-                textblockTimer.Text = $"Timer: {time.Minutes}m {time.Seconds}s {time.Milliseconds}ms";
+                textblockTimer.Text = $"Timer: {time1}ms";
+                textblockTimer.Text += $"\nTimer2: {time2}ms";
             }
         }
 
