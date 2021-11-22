@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace EdgeDetection {
-    class ImgProcess {
-
+    class ImgProcessing {
+         
         public static unsafe Bitmap EdgeDetection(Bitmap inputBmp, int threads) {
 
             int width = inputBmp.Width;
@@ -83,7 +83,7 @@ namespace EdgeDetection {
         }
 
 
-        public static unsafe Bitmap EdgeDetection2(Bitmap inputBmp, int threads) {
+        /*public static unsafe Bitmap EdgeDetection2(Bitmap inputBmp, int threads) {
 
             int width = inputBmp.Width;
             int height = inputBmp.Height;
@@ -141,7 +141,6 @@ namespace EdgeDetection {
             Marshal.Copy(resultBuffer, 0, resultBmpData.Scan0, resultBuffer.Length);
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
-        }
-
+        }*/
     }
 }

@@ -41,30 +41,32 @@ namespace EdgeDetection {
             if (ofd.ShowDialog() == true) {
                 string filename = ofd.FileName;
                 inputBitmap = new Bitmap(filename);
-                imgSelected.Source = ImgProcess.BitmapToImage(inputBitmap);
+                imgSelected.Source = ImgProcessing.BitmapToImage(inputBitmap);
             }
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e) {
 
             if(inputBitmap != null) {
-                timer.Restart();
-                resultBitmap = ImgProcess.EdgeDetection(inputBitmap, (int)sliderThreads.Value);
-                timer.Stop();
+                if (radioCS.IsChecked == true) {
 
-                imgFilter.Source = ImgProcess.BitmapToImage(resultBitmap);
-                double time1 = timer.Elapsed.TotalMilliseconds;
+                    timer.Restart();
+                    resultBitmap = ImgProcessing.EdgeDetection(inputBitmap, (int)sliderThreads.Value);
+                    timer.Stop();
 
-                timer.Restart();
-                resultBitmap = ImgProcess.EdgeDetection2(inputBitmap, (int)sliderThreads.Value);
-                timer.Stop();
+                    imgFilter.Source = ImgProcessing.BitmapToImage(resultBitmap);
 
-                imgFilter.Source = ImgProcess.BitmapToImage(resultBitmap);
-                double time2 = timer.Elapsed.TotalMilliseconds;
-                
-                textblockTimer.Visibility = Visibility.Visible;
-                textblockTimer.Text = $"Timer: {time1}ms";
-                textblockTimer.Text += $"\nTimer2: {time2}ms";
+                    /*timer.Restart();
+                    resultBitmap = ImgProcess.EdgeDetection2(inputBitmap, (int)sliderThreads.Value);
+                    timer.Stop();
+
+                    imgFilter.Source = ImgProcess.BitmapToImage(resultBitmap);
+                    double time2 = timer.Elapsed.TotalMilliseconds;*/
+
+                    textblockTimer.Visibility = Visibility.Visible;
+                    textblockTimer.Text = $"Timer: {timer.Elapsed.TotalMilliseconds}ms";
+                    //textblockTimer.Text += $"\nTimer2: {time2}ms";
+                }
             }
         }
 
