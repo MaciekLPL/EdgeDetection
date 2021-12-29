@@ -41,7 +41,7 @@
         <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock TextAlignment="Center" Text="Threads" FontSize="14"/>
             <DockPanel>
-                <Slider x:Name="sliderThreads" Grid.Row="2" Height="18" Width="300" Maximum="128" Minimum="1" Value="1" IsSnapToTickEnabled="True"></Slider>
+                <Slider x:Name="sliderThreads" Grid.Row="2" Height="18" Width="300" Maximum="64" Minimum="1" Value="1" IsSnapToTickEnabled="True"></Slider>
                 <TextBox x:Name="threadsCount" TextAlignment="Center" Text="{Binding ElementName=sliderThreads, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="30"></TextBox>
             </DockPanel>
         </StackPanel>

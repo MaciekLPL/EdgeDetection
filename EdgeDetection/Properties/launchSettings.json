@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EdgeDetection": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
