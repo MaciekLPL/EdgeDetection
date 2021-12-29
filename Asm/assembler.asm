@@ -19,6 +19,8 @@ bytes_per_r equ 32
     mov     rbp, rsp
     sub     rsp, 40
 
+    push rbx
+
     cmp     r8, 3             
     jl      too_small
     cmp     r9, 3               
@@ -141,6 +143,7 @@ bytes_per_r equ 32
 
     too_small:
 
+    pop rbx
     leave
     ret
 
