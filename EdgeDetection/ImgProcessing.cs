@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -85,7 +82,7 @@ namespace EdgeDetection {
         }
 
 
-        public static Bitmap EdgeDetectionAsm(Bitmap inputBmp, int threads) {
+        public static Bitmap EdgeDetectionAsm(Bitmap inputBmp) {
 
             int width = inputBmp.Width;
             int height = inputBmp.Height;

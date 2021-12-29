@@ -2,7 +2,7 @@
   "profiles": {
     "EdgeDetection": {
       "commandName": "Project",
-      "nativeDebugging": true
+      "nativeDebugging": false
     }
   }
 }

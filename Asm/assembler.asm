@@ -14,10 +14,10 @@ output equ 16
 input equ 24
 bytes_per_r equ 32
 
+
     push    rbp
     mov     rbp, rsp
     sub     rsp, 40
-
 
     cmp     r8, 3             
     jl      too_small
@@ -51,14 +51,17 @@ bytes_per_r equ 32
     ; Kernels:      X  -2   0   2          Y   0    0    0
     ;                  -1   0   1              1    2    1
 
+    mov r9, rbx        ;address of pixel to R9
+    imul r9, 4
+    mov r10, r9
+
+    add r9, rcx
+    add r10, rdx
+
     pxor xmm0, xmm0
     pxor xmm1, xmm1
     pxor xmm2, xmm2
     pxor xmm3, xmm3
-
-    mov r15, rbx        ;address of pixel to R15
-    imul r15, 4
-    add r15, rcx
 
 
     ;middle row
@@ -70,7 +73,7 @@ bytes_per_r equ 32
 
 
     ; bottom row
-    add r15, [rsp + bytes_per_r]
+    add r9, [rsp + bytes_per_r]
     CALL get_pixel
     
     PADDD xmm0, xmm1    ;X kernel (+1, -1)
@@ -78,16 +81,17 @@ bytes_per_r equ 32
     PADDD xmm3, xmm1    ;Y kernel (+1, +1)
     PADDD xmm3, xmm2
 
-    PINSRB xmm1, byte ptr [r15 + 2], 0      ;Y kernel (+2)
-    PINSRB xmm1, byte ptr [r15 + 1], 4
-    PINSRB xmm1, byte ptr [r15], 8
+    PINSRB xmm1, byte ptr [r9 + 2], 0      ;Y kernel (+2)
+    PINSRB xmm1, byte ptr [r9 + 1], 4
+    PINSRB xmm1, byte ptr [r9], 8
+
     PADDD xmm3, xmm1
     PADDD xmm3, xmm1
 
 
     ; top row
-    sub r15, [rsp + bytes_per_r]
-    sub r15, [rsp + bytes_per_r]
+    sub r9, [rsp + bytes_per_r]
+    sub r9, [rsp + bytes_per_r]
     CALL get_pixel
 
     PADDD xmm0, xmm1    ;X kernel (+1, -1)
@@ -95,15 +99,13 @@ bytes_per_r equ 32
     PSUBD xmm3, xmm1    ;Y kernel (-1, -1)
     PSUBD xmm3, xmm2
 
-    PINSRB xmm1, byte ptr [r15 + 2], 0      ;Y kernel (-2)
-    PINSRB xmm1, byte ptr [r15 + 1], 4
-    PINSRB xmm1, byte ptr [r15], 8
+    PINSRB xmm1, byte ptr [r9 + 2], 0      ;Y kernel (-2)
+    PINSRB xmm1, byte ptr [r9 + 1], 4
+    PINSRB xmm1, byte ptr [r9], 8
     PSUBD xmm3, xmm1
     PSUBD xmm3, xmm1
     
 
-
-    ;
     PMULLD xmm0, xmm0
     PMULLD xmm3, xmm3
     
@@ -121,9 +123,9 @@ bytes_per_r equ 32
     PINSRB xmm1, R11d, 8
 
     PMINUD xmm0, xmm1
-    PEXTRB byte ptr [rdx + rbx * 4], xmm0, 0
-    PEXTRB byte ptr [rdx + rbx * 4 + 1], xmm0, 4
-    PEXTRB byte ptr [rdx + rbx * 4 + 2], xmm0, 8
+    PEXTRB byte ptr [r10], xmm0, 0
+    PEXTRB byte ptr [r10 + 1], xmm0, 4
+    PEXTRB byte ptr [r10 + 2], xmm0, 8
 
 
     add rbx, 1
@@ -138,19 +140,19 @@ bytes_per_r equ 32
     jg rowLoop
 
     too_small:
+
     leave
     ret
 
 
-
     get_pixel:
-    PINSRB xmm1, byte ptr [r15 + 6], 0
-    PINSRB xmm1, byte ptr [r15 + 5], 4
-    PINSRB xmm1, byte ptr [r15 + 4], 8
+    PINSRB xmm1, byte ptr [r9 + 6], 0
+    PINSRB xmm1, byte ptr [r9 + 5], 4
+    PINSRB xmm1, byte ptr [r9 + 4], 8
 
-    PINSRB xmm2, byte ptr [r15 - 2], 0
-    PINSRB xmm2, byte ptr [r15 - 3], 4
-    PINSRB xmm2, byte ptr [r15 - 4], 8
+    PINSRB xmm2, byte ptr [r9 - 2], 0
+    PINSRB xmm2, byte ptr [r9 - 3], 4
+    PINSRB xmm2, byte ptr [r9 - 4], 8
     ret
 
 mainSobel endp
