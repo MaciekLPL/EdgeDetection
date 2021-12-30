@@ -57,9 +57,9 @@ namespace EdgeDetection {
                     double magG = Math.Sqrt((gx * gx) + (gy * gy));
                     double magR = Math.Sqrt((rx * rx) + (ry * ry));
 
-                    ptrResult[centerPixel] = magR > 255 ? (byte)255 : (byte)magR;
+                    ptrResult[centerPixel] = magB > 255 ? (byte)255 : (byte)magB;
                     ptrResult[centerPixel + 1] = magG > 255 ? (byte)255 : (byte)magG;
-                    ptrResult[centerPixel + 2] = magB > 255 ? (byte)255 : (byte)magB;
+                    ptrResult[centerPixel + 2] = magR > 255 ? (byte)255 : (byte)magR;
                 }
             });
 

@@ -53,8 +53,8 @@
         
         <TextBlock x:Name="textblockTimer" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" FontSize="14" TextWrapping="Wrap" TextAlignment="Center">Timer: bla bla</TextBlock>
 
-        <Image x:Name="imgSelected" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Height="280" Width="370" Margin="10" StretchDirection="DownOnly"/>
-        <Image x:Name="imgFilter" Grid.Column="1" Grid.Row="3" Grid.RowSpan="4" Height="280" Width="370" Margin="10" StretchDirection="DownOnly"></Image>
+        <Image x:Name="imgSelected" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Height="280" Width="370" Margin="10" StretchDirection="DownOnly" Source="\Resources\no-image.png"/>
+        <Image x:Name="imgFilter" Grid.Column="1" Grid.Row="3" Grid.RowSpan="4" Height="280" Width="370" Margin="10" StretchDirection="DownOnly" Source="\Resources\no-image.png"></Image>
 
     </Grid>
 </Window>

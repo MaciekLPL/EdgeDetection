@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace EdgeDetection {
     /// <summary>
@@ -27,6 +29,7 @@ namespace EdgeDetection {
                 string filename = ofd.FileName;
                 inputBitmap = new Bitmap(filename);
                 imgSelected.Source = ImgProcessing.BitmapToImage(inputBitmap);
+                imgFilter.Source = new BitmapImage(new Uri(@"\Resources\no-image.png", UriKind.Relative));
             }
         }
 
@@ -49,7 +52,6 @@ namespace EdgeDetection {
                 }
 
                 imgFilter.Source = ImgProcessing.BitmapToImage(resultBitmap);
-
                 textblockTimer.Visibility = Visibility.Visible;
                 textblockTimer.Text = $"Timer: {timer.ElapsedMilliseconds}ms";
             }
