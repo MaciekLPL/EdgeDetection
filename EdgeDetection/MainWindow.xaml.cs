@@ -25,8 +25,8 @@ namespace EdgeDetection {
 
         private void btnSelectImage_Click(object sender, RoutedEventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.DefaultExt = ".bmp";
-            ofd.Filter = "BMP Files (*.bmp)|*.bmp";
+            ofd.DefaultExt = ".jpeg";
+            ofd.Filter = "JPEG Image|*.jpg;*.jpeg|Bitmap Image|*.bmp";
 
             if (ofd.ShowDialog() == true) {
                 string filename = ofd.FileName;
@@ -42,19 +42,9 @@ namespace EdgeDetection {
 
             if (inputBitmap != null) {
 
-                if (radioCS.IsChecked == true) {
-
-                    timer.Restart();
-                    resultBitmap = ImgProcessing.EdgeDetection(inputBitmap, (int)sliderThreads.Value);
-                    timer.Stop();
-
-                } else {
-
-                    timer.Restart();
-                    resultBitmap = ImgProcessing.EdgeDetectionAsm(inputBitmap, (int)sliderThreads.Value);
-                    timer.Stop();
-
-                }
+                timer.Restart();
+                resultBitmap = ImgProcessing.EdgeDetection(inputBitmap, (int)sliderThreads.Value, (bool) radioCS.IsChecked);
+                timer.Stop();
 
                 imgFilter.Source = ImgProcessing.BitmapToImage(resultBitmap);
                 textblockTimer.Visibility = Visibility.Visible;
@@ -66,11 +56,11 @@ namespace EdgeDetection {
             if (resultBitmap != null) {
 
                 SaveFileDialog sfd = new SaveFileDialog();
-                sfd.DefaultExt = ".bmp";
-                sfd.Filter = "BMP Files (*.bmp)|*.bmp";
+                sfd.DefaultExt = ".jpeg";
+                sfd.Filter = "JPEG Image (*.jpg,*.jpeg)|*.jpg;*.jpeg|Bitmap Image (.bmp)|*.bmp";
 
                 if (sfd.ShowDialog() == true) {
-                    resultBitmap.Save(sfd.FileName, ImageFormat.Bmp);
+                    resultBitmap.Save(sfd.FileName, ImageFormat.Jpeg);
                 }
             }
         }
