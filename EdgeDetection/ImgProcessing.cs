@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 namespace EdgeDetection {
     unsafe class ImgProcessing {
 
-        [DllImport(@"C:\Users\Maciek\source\repos\EdgeDetection\x64\Debug\Asm.dll")]
+        [DllImport(@"C:\Users\Maciek\source\repos\EdgeDetection\x64\Release\Asm.dll")]
         static extern void mainSobel(byte* input, byte* output, int rows, int cols);
 
         public static Bitmap EdgeDetection(Bitmap inputBmp, int threads) {
@@ -82,7 +82,7 @@ namespace EdgeDetection {
         }
 
 
-        public static Bitmap EdgeDetectionAsm(Bitmap inputBmp) {
+        public static Bitmap EdgeDetectionAsm(Bitmap inputBmp, int threads) {
 
             int width = inputBmp.Width;
             int height = inputBmp.Height;
@@ -94,7 +94,10 @@ namespace EdgeDetection {
             BitmapData resultBmpData = resultBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
             byte* ptrResult = (byte*)resultBmpData.Scan0.ToPointer();
 
-            mainSobel(ptrOriginal, ptrResult, height, width);
+            _ = Parallel.For(1, height - 1, new ParallelOptions { MaxDegreeOfParallelism = threads }, y =>
+            {
+                mainSobel(ptrOriginal, ptrResult, y, width);
+            });
 
             inputBmp.UnlockBits(inputBmpData);
             resultBmp.UnlockBits(resultBmpData);

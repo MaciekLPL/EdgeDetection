@@ -14,11 +14,14 @@ namespace EdgeDetection {
         public MainWindow() {
             InitializeComponent();
             timer = new Stopwatch();
+            threads = Environment.ProcessorCount;
+            sliderThreads.Value = threads;
         }
 
         private readonly Stopwatch timer;
         private Bitmap inputBitmap;
         private Bitmap resultBitmap;
+        private int threads;
 
         private void btnSelectImage_Click(object sender, RoutedEventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -30,6 +33,8 @@ namespace EdgeDetection {
                 inputBitmap = new Bitmap(filename);
                 imgSelected.Source = ImgProcessing.BitmapToImage(inputBitmap);
                 imgFilter.Source = new BitmapImage(new Uri(@"\Resources\no-image.png", UriKind.Relative));
+
+
             }
         }
 
@@ -46,7 +51,7 @@ namespace EdgeDetection {
                 } else {
 
                     timer.Restart();
-                    resultBitmap = ImgProcessing.EdgeDetectionAsm(inputBitmap);
+                    resultBitmap = ImgProcessing.EdgeDetectionAsm(inputBitmap, (int)sliderThreads.Value);
                     timer.Stop();
 
                 }

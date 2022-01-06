@@ -19,13 +19,6 @@ mainSobel proc
     MOV     rbp, rsp                    
     SUB     rsp, 40                     ;make space for local variables
 
-    PUSH rbx                            ;keep the value of the only non-volatile register used
-
-    CMP     r8, 3                       ;check that the picture is not too small 
-    JL      too_small
-    CMP     r9, 3               
-    JL      too_small
-
 
     MOV     [rsp + input], rcx          ;load local variables
     MOV     [rsp + output], rdx
@@ -35,8 +28,6 @@ mainSobel proc
     IMUL    r9, 4                       ;bytes_per_row = columns * 4 bpp
     MOV     [rsp + bytes_per_r], r9
 
-    MOV     rax, [rsp + rows]           ;offset - skip first and last row
-    SUB     rax, 2
 
     MOV     r8, [rsp + columns]         ;offset - skip first and last column
     SUB     r8, 2
@@ -47,23 +38,20 @@ mainSobel proc
     MOVD xmm5, R11d                     ;xmm5 register will hold three 255 values
     PMOVZXBD xmm5, xmm5                 ;and will be used to compare with calculated values
 
-    ADD rcx, [rsp + bytes_per_r]        ;move pointer to the first row in input
-    ADD rdx, [rsp + bytes_per_r]        ;move pointer to the first row in output
+    IMUL r9, [rsp + rows]
+    ADD rcx, r9
+    ADD rdx, r9
 
+    MOV rax, 1                          ;rbx - column counter from 1 to columns - 2
 
-    ;----OUTER LOOP (ROWS)----
-    rowLoop:
-    MOV     rbx, 1                      ;rbx - column counter from 1 to columns - 2
-
-    
     ;----INNER LOOP (COLUMNS)----
     columnLoop:
-    
-    MOV r9, rbx                         ;current pixel in row = columnCounter * 4 bpp
+                                        
+    MOV r9, rax                        ;current pixel in row = columnCounter * 4 bpp
     IMUL r9, 4
     MOV r10, r9
 
-    ADD r9, rcx                         ;Address of current pixel in input
+    ADD r9, rcx                        ;Address of current pixel in input
     ADD r10, rdx                        ;Address of current pixel in output
 
 
@@ -144,20 +132,13 @@ mainSobel proc
     PEXTRB byte ptr [r10 + 2], xmm0, 8
 
 
-    INC rbx                             ;increment column counter
-    CMP rbx, r8                         ;check if all columns have been processed
+    INC rax                             ;increment column counter
+    CMP rax, r8                         ;check if all columns have been processed
     JLE columnLoop                      ;jump if not all columns have been processed  (columnCounter <= columns-2)
     
-    
-    ADD rcx, [rsp + bytes_per_r]        ;move input pointer to next row
-    ADD rdx, [rsp + bytes_per_r]        ;move input pointer to next row
-    SUB rax, 1                          ;decrement row counter
-    CMP rax, 0                          ;check if all rows have been processed
-    JG rowLoop                          ;jump if not all rows have been processed  (rowCounter > 0)
 
     ;---- QUIT PROGRAM ----
-    too_small:
-    POP rbx                         
+
     LEAVE
     RET
 
