@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* ******************************************
+ * Temat: Wykrywanie krawędzi - Operator Sobela
+ * Autor: Maciej Lejczak, Informatyka Katowice, semestr 5, grupa 2
+ * Prowadządzy: mgr inż. Krzysztof Hanzel
+ * Rok akademicki: 2021/2022
+ * ******************************************/
+
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -9,34 +16,49 @@ using System.Windows.Media.Imaging;
 namespace EdgeDetection {
     unsafe class ImgProcessing {
 
-        [DllImport(@"C:\Users\Maciek\source\repos\EdgeDetection\x64\Release\Asm.dll")]
+        [DllImport(@"C:\Users\Maciek\source\repos\EdgeDetection\x64\Release\Asm.dll")]                                                                          //Load ASM dll
         static extern void mainSobel(byte* input, byte* output, int rows, int cols);
 
+        /*
+         * Get BitmapData of original and result image (and pointers to them). Call execution type selected by user.
+         * inputBmp - Bitmap loaded by user
+         * threads - number of threads selected by user
+         * cs - execution type  (C#/ASM)
+         */
         public static Bitmap EdgeDetection(Bitmap inputBmp, int threads, bool cs) {
 
             int width = inputBmp.Width;
             int height = inputBmp.Height;
 
-            BitmapData inputBmpData = inputBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            byte* ptrOriginal = (byte*)inputBmpData.Scan0.ToPointer();
+            BitmapData inputBmpData = inputBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);              //Get BitmapData of original image
+            byte* ptrOriginal = (byte*)inputBmpData.Scan0.ToPointer();                                                                                          //Pointer to original image
 
-            Bitmap resultBmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            BitmapData resultBmpData = resultBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            byte* ptrResult = (byte*)resultBmpData.Scan0.ToPointer();
+            Bitmap resultBmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);                                                                          
+            BitmapData resultBmpData = resultBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);            //Get BitmapData of result image
+            byte* ptrResult = (byte*)resultBmpData.Scan0.ToPointer();                                                                                           //Pointer to result image
 
             int stride = inputBmpData.Stride;
 
-            if (cs) 
+            if (cs)                                                                                                                                             //Choose proper execution type
                 CSharp(ptrOriginal, ptrResult, width, height, stride, threads);
             else 
                 Asm(ptrOriginal, ptrResult, width, height, threads);
 
 
-            inputBmp.UnlockBits(inputBmpData);
+            inputBmp.UnlockBits(inputBmpData);                                                                                                                  //Unlock BitmapData
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
 
+        /*
+         * C# implementation
+         * ptrOriginal - pointer to original image
+         * ptrResult - pointer to result image
+         * width - width of images
+         * height - height of images
+         * stride - stride of images
+         * threads - number of threads selected by user
+         */
         private static void CSharp(byte* ptrOriginal, byte* ptrResult, int width, int height, int stride, int threads) {
 
             sbyte[,] kX = new sbyte[,] { { 1, 0, -1 }, { 2, 0, -2 }, { 1, 0, -1 } };                                    //Kernels definitions
@@ -77,14 +99,26 @@ namespace EdgeDetection {
             });
         }
 
+        /*
+         * ASM implementation
+         * ptrOriginal - pointer to original image
+         * ptrResult - pointer to result image
+         * width - width of images
+         * height - height of images
+         * threads - number of threads selected by user
+         */
         private static void Asm(byte* ptrOriginal, byte* ptrResult, int width, int height, int threads) {
 
-            _ = Parallel.For(1, height - 1, new ParallelOptions { MaxDegreeOfParallelism = threads }, y =>
+            _ = Parallel.For(1, height - 1, new ParallelOptions { MaxDegreeOfParallelism = threads }, y =>              //Outer loop - parallel
             {
-                mainSobel(ptrOriginal, ptrResult, y, width);
+                mainSobel(ptrOriginal, ptrResult, y, width);                                                            //ASM procedure call
             });
         }
 
+        /*
+         * Bitmap to BitmapImage converter
+         * bitmap - Bitmap to be converted
+         */
         public static BitmapImage BitmapToImage(Bitmap bitmap) {
 
             using MemoryStream memory = new MemoryStream();

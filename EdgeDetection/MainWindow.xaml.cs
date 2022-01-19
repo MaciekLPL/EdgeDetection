@@ -1,4 +1,11 @@
-﻿using Microsoft.Win32;
+﻿/* ******************************************
+ * Temat: Wykrywanie krawędzi - Operator Sobela
+ * Autor: Maciej Lejczak, Informatyka Katowice, semestr 5, grupa 2
+ * Prowadządzy: mgr inż. Krzysztof Hanzel
+ * Rok akademicki: 2021/2022
+ * ******************************************/
+
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -13,17 +20,20 @@ namespace EdgeDetection {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            timer = new Stopwatch();
-            threads = Environment.ProcessorCount;
-            sliderThreads.Value = threads;
+            timer = new Stopwatch();                    //create Timer
+            threads = Environment.ProcessorCount;       //load processor count
+            sliderThreads.Value = threads;              //set slider to processor count value
         }
 
         private readonly Stopwatch timer;
         private Bitmap inputBitmap;
-        private Bitmap resultBitmap;
+        private Bitmap resultBitmap;                    
         private int threads;
         private string filename;
 
+        /*
+         * Open OpenFileDialog, let user select input image, if selected - load into input Image Control
+         */
         private void btnSelectImage_Click(object sender, RoutedEventArgs e) {
 
             OpenFileDialog ofd = new OpenFileDialog();
@@ -39,6 +49,10 @@ namespace EdgeDetection {
             }
         }
 
+        /*
+         * Start execution - check if input is valid, start timer, call ImgProcessing.EdgeDetection
+         * After execution - stop timer, print execution time
+         */
         private void BtnStart_Click(object sender, RoutedEventArgs e) {
 
             if (inputBitmap != null && inputBitmap.Width > 2 && inputBitmap.Height > 2) {
@@ -56,6 +70,9 @@ namespace EdgeDetection {
             }
         }
 
+        /*
+         * Save image - check if there is result image, let user save the file using SaveFileDialog.
+         */
         private void BtnSave_Click(object sender, RoutedEventArgs e) {
 
             if (resultBitmap != null) {
