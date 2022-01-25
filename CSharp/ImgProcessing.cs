@@ -9,8 +9,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace CSharp {
-    public unsafe static class ImgProcessing {
-
+    public static class ImgProcessing {
 
         /*
          * C# implementation
@@ -21,7 +20,7 @@ namespace CSharp {
          * stride - stride of images
          * threads - number of threads selected by user
          */
-        private static void CSharp(byte* ptrOriginal, byte* ptrResult, int width, int height, int stride, int threads) {
+        public unsafe static void CSharpSobel(byte* ptrOriginal, byte* ptrResult, int width, int height, int stride, int threads) {
 
             sbyte[,] kX = new sbyte[,] { { 1, 0, -1 }, { 2, 0, -2 }, { 1, 0, -1 } };                                    //Kernels definitions
             sbyte[,] kY = new sbyte[,] { { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } };

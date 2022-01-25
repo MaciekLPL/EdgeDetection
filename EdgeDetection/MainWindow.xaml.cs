@@ -99,7 +99,12 @@ namespace EdgeDetection {
             }
         }
 
-
+        /*
+         * Create Bitmaps, BitmapData, call proper function (C#/ASM)
+         * inputBmp - bitmap loaded by user
+         * threads - no. of threads selected by user
+         * cs - radio button state (True - C#, False - ASM)
+         */
         public static Bitmap EdgeDetection(Bitmap inputBmp, int threads, bool cs) {
 
             int width = inputBmp.Width;
@@ -125,7 +130,14 @@ namespace EdgeDetection {
             return resultBmp;
         }
 
-
+        /*
+         * Call ASM function, execute in parallel for
+         * ptrOriginal - pointer to original image
+         * ptrResult - pointer to result image
+         * width - width of images
+         * height - height of images
+         * threads - number of threads selected by user
+         */
         private static void Asm(byte* ptrOriginal, byte* ptrResult, int width, int height, int threads) {
 
             _ = Parallel.For(1, height - 1, new ParallelOptions { MaxDegreeOfParallelism = threads }, y => {
@@ -133,6 +145,10 @@ namespace EdgeDetection {
             });
         }
 
+        /*
+         * BitmapToImage convert
+         * bitmap - input bitmap to be converted
+         */
         public static BitmapImage BitmapToImage(Bitmap bitmap) {
 
             using MemoryStream memory = new MemoryStream();
