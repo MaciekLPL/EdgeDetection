@@ -5,6 +5,7 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EdgeDetection", "EdgeDetection\EdgeDetection.csproj", "{1F381130-FEC4-4E22-8911-CA8C5BD049B2}"
 	ProjectSection(ProjectDependencies) = postProject
+		{F299EB10-A75F-4365-94F0-E4F205D196D3} = {F299EB10-A75F-4365-94F0-E4F205D196D3}
 		{7C0D1C48-11AD-4250-800E-6246D9BE7CE2} = {7C0D1C48-11AD-4250-800E-6246D9BE7CE2}
 	EndProjectSection
 EndProject
