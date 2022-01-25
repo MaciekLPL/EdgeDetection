@@ -1,3 +1,9 @@
+;* ******************************************
+;* Temat: Wykrywanie krawêdzi - Operator Sobela
+;* Autor: Maciej Lejczak, Informatyka Katowice, semestr 5, grupa 2
+;* Prowadz¹dzy: mgr in¿. Krzysztof Hanzel
+;* Rok akademicki: 2021/2022
+;* ******************************************/
 .code
 
 mainSobel proc
@@ -70,6 +76,11 @@ mainSobel proc
     PXOR xmm3, xmm3
     PXOR xmm4, xmm4
 
+    ;xmm0 - values of RGBx
+    ;xmm4 - values of RGBy
+    ;xmm1 - left pixel of currently computed row
+    ;xmm2 - middle pixel of currently computed row
+    ;xmm3 - right pixel of currently computed row
 
     ;----MIDDLE ROW CALCULATIONS----
     ;---- X kernel {-2,  0,  2} ----
@@ -104,7 +115,7 @@ mainSobel proc
     CALL get_row
     ; (X)
     PSUBD xmm0, xmm1                    ;-1 * left pixel
-    PADDD xmm0, xmm2                    ;+1 * right pixel
+    PADDD xmm0, xmm3                    ;+1 * right pixel
     ; (Y)
     PSUBD xmm4, xmm1                    ;-1 * left pixel
     PSUBD xmm4, xmm2                    ;-2 * center pixel
