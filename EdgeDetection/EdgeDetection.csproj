@@ -34,6 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="CSharp">
+      <HintPath>..\CSharp\bin\Release\CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\no-image.png" />
   </ItemGroup>
 
