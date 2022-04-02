@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <Reference Include="CSharp">
-      <HintPath>..\CSharp\bin\Release\CSharp.dll</HintPath>
+      <HintPath>..\CSharp\bin\x64\Release\CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
 

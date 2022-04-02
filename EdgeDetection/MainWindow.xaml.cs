@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.IO;
-using CSharp;
+using CSharp;               //C# implementation DLL -> Soultion Explorer -> EdgeDetection -> Dependencies -> Assemblies -> CSharp
 
 namespace EdgeDetection {
     /// <summary>
